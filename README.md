@@ -13,8 +13,8 @@ following services are already installed and configured correctly:
 
 ## Adding SipRecepta
 
-`SipRecepta` is a plugin for `FreeSwitch` to handle incoming SIP calls to
-`SIP-Jibri`. The following steps are testing in `Debian 12 Bookworm`. Assumed
+`SipRecepta` is a plugin for `FreeSwitch` to route incoming SIP calls to
+`SIP-Jibri`. The following steps are tested in `Debian 12 Bookworm`. Assumed
 that `FreeSwitch` already installed and running on this server.
 
 ### Install additional packages
