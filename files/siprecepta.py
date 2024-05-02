@@ -127,6 +127,7 @@ def request_meeting_data(pin):
         return {
             "host": "https://jitsi.nordeck.corp",
             "room": "myroom",
+            "token": "",
         }
 
     return {}
@@ -142,11 +143,17 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
         headers = {
             "Content-Type": "application/json",
         }
+
+        if meeting.get("token"):
+            room = f"{meeting.get('room')}?jwt={meeting.get('token')}"
+        else:
+            room = meeting.get("room")
+
         data = {
             "callParams": {
                 "callUrlInfo": {
                     "baseUrl": meeting.get("host"),
-                    "callName": meeting.get("room")
+                    "callName": room
                 }
             },
             "componentParams": {
