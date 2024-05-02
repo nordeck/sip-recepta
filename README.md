@@ -99,6 +99,14 @@ TOKEN="$HEADER.$PAYLOAD.$SIGN"
 echo $TOKEN
 ```
 
+### Restart
+
+Restart the service:
+
+```bash
+systemctl restart freeswitch
+```
+
 ## Usage
 
 Call the number set in
