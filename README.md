@@ -98,3 +98,15 @@ SIGN=$(echo -n "$HEADER.$PAYLOAD" | \
 TOKEN="$HEADER.$PAYLOAD.$SIGN"
 echo $TOKEN
 ```
+
+## Usage
+
+Call the number set in
+[98_public_siprecepta_dialplan.xml](files/98_public_siprecepta_dialplan.xml).
+e.g.:
+
+```
+112233@freeswitch_address:5080
+```
+
+Type PIN when asked. For know there is a hardcoded value which is `123456`.
