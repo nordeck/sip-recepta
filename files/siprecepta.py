@@ -149,6 +149,7 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
         else:
             room = meeting.get("room")
 
+        # contact is a private IP address to force FreeSwitch to overwrite it
         data = {
             "callParams": {
                 "callUrlInfo": {
@@ -165,7 +166,7 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
                 "sipClientParams": {
                     "userName": f"{sip_user}@{sip_domain}",
                     "password": f"{sip_pass}",
-                    "contact": f"<sip:{sip_user}@{sip_domain}:{sip_port};transport=udp>",
+                    "contact": f"<sip:{sip_user}@192.168.1.1>",
                     "sipAddress": "sip:jibri@127.0.0.1",
                     "displayName": DISPLAYNAME,
                     "autoAnswer": True,
