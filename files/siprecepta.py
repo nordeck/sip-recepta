@@ -164,7 +164,7 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
             },
             "metadata": {
                 "sipClientParams": {
-                    "userName": f"{sip_user}@{sip_domain}",
+                    "userName": f"{sip_user}@{sip_domain}:{sip_port}",
                     "password": f"{sip_pass}",
                     "contact": f"<sip:{sip_user}@192.168.1.1>",
                     "sipAddress": "sip:jibri@127.0.0.1",
