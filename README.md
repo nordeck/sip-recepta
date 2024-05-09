@@ -118,3 +118,6 @@ e.g.:
 ```
 
 Type PIN when asked. For now there is a hardcoded value which is `123456`.
+
+_Tips: if it is possible for this setup to set `5060` as the external SIP port
+then callers can use SIP address without setting the port._
