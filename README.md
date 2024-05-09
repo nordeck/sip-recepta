@@ -117,4 +117,4 @@ e.g.:
 112233@freeswitch_address:5080
 ```
 
-Type PIN when asked. For know there is a hardcoded value which is `123456`.
+Type PIN when asked. For now there is a hardcoded value which is `123456`.
