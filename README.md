@@ -145,5 +145,5 @@ If you have a domain name, set `SRV` records for SIP service.
 In this case, the remote peer can call `112233@mydomain.com` without setting the
 port.
 
-Youmay check the records in [VoIP Toolbox](https://voiptoolbox.net). Write your
+You may check the records in [VoIP Toolbox](https://voiptoolbox.net). Write your
 domain into the input box. e.g `mydomain.com`
