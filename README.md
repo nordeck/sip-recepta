@@ -119,5 +119,28 @@ e.g.:
 
 Type PIN when asked. For now there is a hardcoded value which is `123456`.
 
-_Tips: if it is possible for this setup to set `5060` as the external SIP port
-then callers can use SIP address without setting the port._
+## Tips
+
+### Default port
+
+If it is possible for this setup to set `5060` as the external SIP port then
+callers can use SIP address without setting the port.
+
+This is fine if you have only an IP address for this setup. If you hve a domain
+name,use the following...
+
+### DNS records
+
+If you have a domain name, set `SRV` records for SIP service.
+
+- DNS `A` record for `sip.mydomain.com` which points the IP address of this
+  server.
+
+- DNS `SRV` record for `_sip._tcp.mydomain.com` which points `sip.mydomain.com`.
+  Select `5080` as port if you still use the default external port.
+
+- DNS `SRV` record for `_sip._udp.mydomain.com` which points `sip.mydomain.com`.
+  Select `5080` as port if you still use the default external port.
+
+In this case, the remote peer can call `112233@mydomain.com` without setting the
+port.
