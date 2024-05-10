@@ -126,8 +126,8 @@ Type PIN when asked. For now there is a hardcoded value which is `123456`.
 If it is possible for this setup to set `5060` as the external SIP port then
 callers can use SIP address without setting the port.
 
-This is fine if you have only an IP address for this setup. If you hve a domain
-name,use the following...
+This is fine if you have only an IP address for this setup. If you have a domain
+name, use the following...
 
 ### DNS records
 
