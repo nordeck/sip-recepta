@@ -20,6 +20,8 @@ This is about getting the session data from Booking Portal by using PIN.
   token: "token-value-for-jitsi",
   displayname: "display-name-for-sip"
   ```
+- `token` is optional depending on Jitsi setup.
+- Set `lobby_bypass` in `token` depending on Jitsi setup.
 
 ## Questions
 
