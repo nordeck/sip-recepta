@@ -109,12 +109,20 @@ systemctl restart freeswitch
 
 ## Usage
 
-Call the number set in
+Call the external number set in
 [98_public_siprecepta_dialplan.xml](files/98_public_siprecepta_dialplan.xml).
 e.g.:
 
 ```
 112233@freeswitch_address:5080
+```
+
+Or call the internal number set in
+[99_default_siprecepta_dialplan.xml](files/99_default_siprecepta_dialplan.xml).
+e.g.:
+
+```
+112233
 ```
 
 Type PIN when asked. For now there is a hardcoded value which is `123456`.

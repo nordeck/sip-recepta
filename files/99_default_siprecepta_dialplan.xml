@@ -11,3 +11,12 @@
     </condition>
   </extension>
 </include>
+
+<include>
+  <extension name="default_siprecepta_internal">
+    <condition field="destination_number" expression="^(112233)$">
+      <action application="set" data="domain_name=$${domain}"/>
+      <action application="python" data="nordeck.siprecepta"/>
+    </condition>
+  </extension>
+</include>
