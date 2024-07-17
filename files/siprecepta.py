@@ -15,10 +15,12 @@ Add /etc/freeswitch/dialplan/public/98_public_siprecepta_dialplan.xml
 
 Add /etc/freeswitch/dialplan/default/99_default_siprecepta_dialplan.xml
 
-Add the component-selector URL in /etc/freeswitch/vars.xml
+Add SIP-Jibri's conference mapper URI in /etc/freeswitch/vars.xml
+Add component_selector_url
 Add component_selector_verify if its certificate is self-signed
 Add component_selector_token if PROTECTED_SIGNAL_API is set in component-selector
 
+  <X-PRE-PROCESS cmd="set" data="conference_mapper_sipjibri_uri=https://domain/path?pin={pin}"/>
   <X-PRE-PROCESS cmd="set" data="component_selector_url=https://domain/path"/>
   <X-PRE-PROCESS cmd="set" data="component_selector_verify=false"/>
   <X-PRE-PROCESS cmd="set" data="component_selector_token=eyJhbG..."/>
@@ -58,10 +60,14 @@ from os.path import getmtime
 from random import randint
 from time import time
 import json
-from requests import post
+import requests
 import freeswitch
 
+PIN_MAX_LENGTH = 9
 ALLOWED_ATTEMPTS = 3
+REQUESTS_TIMEOUT = 10
+PIN_INPUT_TIMEOUT = 20
+
 DISPLAYNAME = "Cisco"
 EXTENSION_EXPIRE_MINUTES = 60
 USER_DIR = "/tmp/siprecepta"
@@ -111,7 +117,7 @@ def create_extension(api, session, sip_domain, sip_user, sip_pass):
     return False
 
 # ------------------------------------------------------------------------------
-def request_meeting_data(pin):
+def query_meeting(pin):
     """
     Get the meeting data from API service by using PIN.
     """
@@ -120,15 +126,19 @@ def request_meeting_data(pin):
     if pin == "":
         return {}
 
-    # There will be some api request here which gets the meeting details from
-    # the conference mapper (Booking Portal) by sending the pin number.
-    # It returns a hardcoded value for now.
-    if pin == "123456":
-        return {
-            "host": "https://jitsi.nordeck.corp",
-            "room": "myroom",
-            "token": "",
-        }
+    try:
+        api = freeswitch.API()
+        uri = api.executeString("global_getvar conference_mapper_sipjibri_uri")
+        uri = uri.format(pin=pin)
+        res = requests.get(uri, timeout=REQUESTS_TIMEOUT)
+        jdata = res.json()
+        room = jdata.get("room")
+
+        freeswitch.consoleLog("info", f"SIP-Jibri Conference: {room}")
+
+        return jdata
+    except:
+        pass
 
     return {}
 
@@ -199,7 +209,7 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
         # Post the request
         json_data = json.dumps(data)
         freeswitch.consoleLog("debug", f"post data: {json_data}")
-        res= post(
+        res= requests.post(
             url,
             headers=headers,
             data=json_data,
@@ -232,11 +242,11 @@ def get_meeting(session):
         i = 1
         while True:
             # get PIN
-            pin = session.getDigits(6, "#", 8000)
+            pin = session.getDigits(PIN_MAX_LENGTH, "#", PIN_INPUT_TIMEOUT * 1000)
             freeswitch.consoleLog("debug", f"PIN NUMBER {i}: {pin}")
 
             # Completed if there is a valid reply from API service for this PIN
-            meeting= request_meeting_data(pin)
+            meeting = query_meeting(pin)
             if meeting:
                 return meeting
 
