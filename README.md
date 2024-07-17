@@ -126,7 +126,7 @@ e.g.:
 112233
 ```
 
-Type PIN when asked. For now there is a hardcoded value which is `123456`.
+Type PIN when asked.
 
 ## Tips
 
