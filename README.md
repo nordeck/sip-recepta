@@ -78,6 +78,10 @@ Put the following variables into _/etc/freeswitch/vars.xml_:
 <X-PRE-PROCESS cmd="set" data="component_selector_token=eyJhbG..."/>
 ```
 
+Update `conference_mapper_sipjibri_uri` according to your conference mapper URI.
+
+Update `component_selector_url` according to your component-selector URL.
+
 `component_selector_verify` should be `false` if `Jitsi-Component-Selector` has
 not a trusted certificate.
 
