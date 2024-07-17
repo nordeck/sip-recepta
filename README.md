@@ -72,6 +72,7 @@ Put `siprecepta` folder into _/etc/freeswitch/directory/default.xml_
 Put the following variables into _/etc/freeswitch/vars.xml_:
 
 ```xml
+<X-PRE-PROCESS cmd="set" data="conference_mapper_sipjibri_uri=https://domain/path?pin={pin}"/>
 <X-PRE-PROCESS cmd="set" data="component_selector_url=https://domain/path"/>
 <X-PRE-PROCESS cmd="set" data="component_selector_verify=false"/>
 <X-PRE-PROCESS cmd="set" data="component_selector_token=eyJhbG..."/>
