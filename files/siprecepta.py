@@ -132,9 +132,13 @@ def query_meeting(pin):
         uri = uri.format(pin=pin)
         res = requests.get(uri, timeout=REQUESTS_TIMEOUT)
         jdata = res.json()
+        host = jdata.get("host")
         room = jdata.get("room")
 
         freeswitch.consoleLog("info", f"SIP-Jibri Conference: {room}")
+
+        if not host or not room:
+            raise ValueError("Meeting not found")
 
         return jdata
     except:
