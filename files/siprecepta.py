@@ -352,6 +352,8 @@ def handler(session, _args):
             f"SipRecepta extension: {extension}\n"
         )
         if not extension:
+            session.streamFile("ivr/ivr-no_user_response.wav")
+            session.sleep(1000)
             session.hangup()
             return
 
