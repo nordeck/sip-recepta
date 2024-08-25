@@ -117,7 +117,7 @@ def create_extension(api, session, sip_domain, sip_user, sip_pass):
     return False
 
 # ------------------------------------------------------------------------------
-def query_meeting(pin):
+def query_meeting(uri, pin):
     """
     Get the meeting data from API service by using PIN.
     """
@@ -127,8 +127,6 @@ def query_meeting(pin):
         return {}
 
     try:
-        api = freeswitch.API()
-        uri = api.executeString("global_getvar conference_mapper_sipjibri_uri")
         uri = uri.format(pin=pin)
         res = requests.get(uri, timeout=REQUESTS_TIMEOUT)
         jdata = res.json()
@@ -240,6 +238,13 @@ def get_meeting(session):
     """
 
     try:
+        # Get the conference mapper URI
+        uri = session.getVariable("conference_mapper_uri")
+        if not uri:
+            session.streamFile("misc/error.wav")
+            session.sleep(1000)
+            return {}
+
         # Ask for PIN
         session.streamFile("conference/conf-pin.wav")
 
@@ -250,7 +255,7 @@ def get_meeting(session):
             freeswitch.consoleLog("debug", f"PIN NUMBER {i}: {pin}")
 
             # Completed if there is a valid reply from API service for this PIN
-            meeting = query_meeting(pin)
+            meeting = query_meeting(uri, pin)
             if meeting:
                 return meeting
 
