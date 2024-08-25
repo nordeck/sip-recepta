@@ -67,18 +67,19 @@ Put `siprecepta` folder into _/etc/freeswitch/directory/default.xml_
 </groups>
 ```
 
-### Global variables
+### Variables
 
-Put the following variables into _/etc/freeswitch/vars.xml_:
+Update the variables in `98_public_siprecepta_dialplan.xml` and
+`99_default_siprecepta_dialplan.xml`:
 
 ```xml
-<X-PRE-PROCESS cmd="set" data="conference_mapper_sipjibri_uri=https://domain/path?pin={pin}"/>
-<X-PRE-PROCESS cmd="set" data="component_selector_url=https://domain/path"/>
-<X-PRE-PROCESS cmd="set" data="component_selector_verify=false"/>
-<X-PRE-PROCESS cmd="set" data="component_selector_token=eyJhbG..."/>
+<action application="set" data="conference_mapper_uri=https://domain/path?pin={pin}"/>
+<action application="set" data="component_selector_url=https://domain/path"/>
+<action application="set" data="component_selector_verify=false"/>
+<action application="set" data="component_selector_token=eyJhbG..."/>
 ```
 
-Update `conference_mapper_sipjibri_uri` according to your conference mapper URI.
+Update `conference_mapper_uri` according to your conference mapper URI.
 
 Update `component_selector_url` according to your component-selector URL.
 

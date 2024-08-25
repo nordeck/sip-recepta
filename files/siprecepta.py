@@ -15,15 +15,16 @@ Add /etc/freeswitch/dialplan/public/98_public_siprecepta_dialplan.xml
 
 Add /etc/freeswitch/dialplan/default/99_default_siprecepta_dialplan.xml
 
-Add SIP-Jibri's conference mapper URI in /etc/freeswitch/vars.xml
-Add component_selector_url
-Add component_selector_verify if its certificate is self-signed
-Add component_selector_token if PROTECTED_SIGNAL_API is set in component-selector
+In 98_public_siprecepta_dialplan.xml and 99_default_siprecepta_dialplan.xml:
+- Update conference_mapper_uri according to your environment
+- Update component_selector_url according to your environment
+- Unset component_selector_verify if its certificate is self-signed
+- Add component_selector_token if PROTECTED_SIGNAL_API is set in component-selector
 
-  <X-PRE-PROCESS cmd="set" data="conference_mapper_sipjibri_uri=https://domain/path?pin={pin}"/>
-  <X-PRE-PROCESS cmd="set" data="component_selector_url=https://domain/path"/>
-  <X-PRE-PROCESS cmd="set" data="component_selector_verify=false"/>
-  <X-PRE-PROCESS cmd="set" data="component_selector_token=eyJhbG..."/>
+  <action application="set" data="conference_mapper_uri=https://domain/path?pin={pin}"/>
+  <action application="set" data="component_selector_url=https://domain/path"/>
+  <action application="set" data="component_selector_verify=false"/>
+  <action application="set" data="component_selector_token=eyJhbG..."/>
 
 To generate component_selector_token:
   PRIVATE_KEY_FILE="/path/to/signal.key"

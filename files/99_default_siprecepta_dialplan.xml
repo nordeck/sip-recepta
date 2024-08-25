@@ -16,6 +16,10 @@
   <extension name="default_siprecepta_internal">
     <condition field="destination_number" expression="^(112233)$">
       <action application="set" data="domain_name=$${domain}"/>
+      <action application="set" data="conference_mapper_uri=https://mydomain.com/path?pin={pin}"/>
+      <action application="set" data="component_selector_url=https://mydomain.com/path"/>
+      <action application="set" data="component_selector_verify=true"/>
+      <action application="set" data="component_selector_token="/>
       <action application="python" data="nordeck.siprecepta"/>
     </condition>
   </extension>
