@@ -88,7 +88,7 @@ USER_TPL = """
 # pylint: disable=bare-except
 
 # ------------------------------------------------------------------------------
-def create_extension(api, session, sip_domain, sip_user, sip_pass):
+def create_extension(api, session, sip):
     """
     Create a temporary SIP extension only for this session.
     """
@@ -97,11 +97,11 @@ def create_extension(api, session, sip_domain, sip_user, sip_pass):
         # Create the extension config file
         makedirs(USER_DIR, exist_ok=True)
         xml = USER_TPL.format(
-            sipDomain=sip_domain,
-            sipUser=sip_user,
-            sipPass=sip_pass,
+            sipDomain=sip.get('domain'),
+            sipUser=sip.get('user'),
+            sipPass=sip.get('pass'),
         )
-        path = f"{USER_DIR}/siprecepta_{sip_user}.xml"
+        path = f"{USER_DIR}/siprecepta_{sip.get('user')}.xml"
         with open(path, "w", encoding="utf-8") as file:
             file.write(xml)
 
@@ -145,7 +145,7 @@ def query_meeting(uri, pin):
     return {}
 
 # ------------------------------------------------------------------------------
-def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
+def request_sipjibri(session, sip, meeting):
     """
     Send a request to component-selector to activate a SIP-Jibri instance for
     this session.
@@ -162,6 +162,7 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
             room = meeting.get("room")
 
         # contact is a private IP address to force FreeSwitch to overwrite it
+        username = f"{sip.get('user')}@{sip.get('domain')}:{sip.get('port')}"
         data = {
             "callParams": {
                 "callUrlInfo": {
@@ -176,9 +177,9 @@ def request_sipjibri(sip_domain, sip_port, sip_user, sip_pass, meeting):
             },
             "metadata": {
                 "sipClientParams": {
-                    "userName": f"{sip_user}@{sip_domain}:{sip_port}",
-                    "password": f"{sip_pass}",
-                    "contact": f"<sip:{sip_user}@192.168.1.1>",
+                    "userName": username,
+                    "password": f"{sip.get('pass')}",
+                    "contact": f"<sip:{sip.get('user')}@192.168.1.1>",
                     "sipAddress": "sip:jibri@127.0.0.1",
                     "displayName": DISPLAYNAME,
                     "autoAnswer": True,
@@ -303,27 +304,23 @@ def invite_sipjibri(session, meeting):
         api = freeswitch.API()
 
         # Generate extension data
-        sip_domain = api.executeString("global_getvar domain")
-        sip_port = api.executeString("global_getvar internal_sip_port")
-        sip_user = str(int(time() * 1000))[-9:]
-        sip_pass = randint(10**8, 10**9 - 1)
+        sip = {
+            'domain': api.executeString("global_getvar domain"),
+            'port': api.executeString("global_getvar internal_sip_port"),
+            'user': str(int(time() * 1000))[-9:],
+            'pass': randint(10**8, 10**9 - 1),
+        }
 
         # Create the extension
-        if not create_extension(api, session, sip_domain, sip_user, sip_pass):
+        if not create_extension(api, session, sip):
             return None
 
         # Send a request to component-selector to activate a SIP-Jibri instance
-        okay = request_sipjibri(
-            sip_domain,
-            sip_port,
-            sip_user,
-            sip_pass,
-            meeting,
-        )
+        okay = request_sipjibri(session, sip, meeting)
         if not okay:
             return None
 
-        return sip_user
+        return sip.get('user')
     except:
         return None
 
