@@ -188,13 +188,12 @@ def request_sipjibri(session, sip, meeting):
             }
         }
 
-        api = freeswitch.API()
-        url = api.executeString("global_getvar component_selector_url")
+        url = session.getVariable("component_selector_url")
         freeswitch.consoleLog("info", f"component_selector_url: {url}")
         if not url:
             return False
 
-        verify = api.executeString("global_getvar component_selector_verify")
+        verify = session.getVariable("component_selector_verify")
         freeswitch.consoleLog("info", f"component_selector_verify: {verify}")
         if not verify:
             verify = True
@@ -204,7 +203,7 @@ def request_sipjibri(session, sip, meeting):
             verify = True
         freeswitch.consoleLog("info", f"generated verify: {verify}")
 
-        token = api.executeString("global_getvar component_selector_token")
+        token = session.getVariable("component_selector_token")
         freeswitch.consoleLog("debug", f"component_selector_token: {token}")
         if token:
             headers["Authorization"] = f"Bearer {token}"
